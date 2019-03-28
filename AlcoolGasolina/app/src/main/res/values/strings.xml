@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Álcool ou Gasolina</string>
+    <string name="alcool">Álcool</string>
+    <string name="gasolina">Gasolina</string>
+    <string name="calcular">Calcular</string>
+    <string name="limpar">Limpar</string>
+</resources>
