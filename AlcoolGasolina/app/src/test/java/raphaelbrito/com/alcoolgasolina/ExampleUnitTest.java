@@ -1,4 +1,4 @@
-package raphaelbrito.com.helloword;
+package raphaelbrito.com.alcoolgasolina;
 
 import org.junit.Test;
 

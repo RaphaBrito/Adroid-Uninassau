@@ -1,4 +1,4 @@
-package raphaelbrito.com.helloword;
+package raphaelbrito.com.alcoolgasolina;
 
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+
 
 public class MainActivity extends AppCompatActivity {
     EditText editGasolina;
@@ -36,20 +38,44 @@ public class MainActivity extends AppCompatActivity {
 
         btncalcular.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                double valorAlcool = Float.valueOf(editAlcool.getText().toString());
-                double valorGasolina = Float.valueOf(editGasolina.getText().toString());
+                String strAlcool = editAlcool.getText().toString();
+                String strGasolina = editGasolina.getText().toString();
 
-                Log.d("MainActivity - Edit Alcool", String.valueOf(valorAlcool));
-                Log.d("MainActivity - Edit Gasolina", String.valueOf(valorGasolina) );
+                if (strAlcool.isEmpty() || strGasolina.isEmpty()){
+                    Context contexto = getApplicationContext();
+                    int duracao = Toast.LENGTH_SHORT;
 
-                double resultado = (valorGasolina * 0.7);
-                Log.d("MainActivity - Edit Result", String.valueOf(valorGasolina * 0.7));
-                if(resultado > valorAlcool || resultado == valorAlcool){
-                    Log.d("MainActivity - Resultado", "É Melhor usar Álcool" );
-                }else{
-                    Log.d("MainActivity - Resultado", "É Melhor usar Gasolina" );
+                    Toast toast = Toast.makeText(contexto, R.string.campos_vazios,duracao);
+                    toast.show();
+                }else {
+
+                    double valorAlcool = Float.valueOf(strAlcool);
+                    double valorGasolina = Float.valueOf(strGasolina);
+
+                    Log.d("MainActivity - Edit Alcool", String.valueOf(valorAlcool));
+                    Log.d("MainActivity - Edit Gasolina", String.valueOf(valorGasolina));
+
+                    //Cria o gerador do AlertDialog
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    //define o titulo
+                    builder.setTitle(R.string.melhor_usar);
+
+                    double resultado = (valorGasolina * 0.7);
+                    Log.d("MainActivity - Edit Result", String.valueOf(valorGasolina * 0.7));
+                    if (resultado < valorAlcool) {
+                        Log.d("MainActivity - Resultado", "É Melhor usar Gasolina");
+                        //define a mensagem
+                        builder.setMessage(R.string.gasolina);
+                        builder.show();
+                    } else {
+                        Log.d("MainActivity - Resultado", "É Melhor usar Álcool");
+                        //define a mensagem
+                        builder.setMessage(R.string.alcool);
+                        builder.show();
+                    }
+
+
                 }
-
 
             }
         });
