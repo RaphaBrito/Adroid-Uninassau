@@ -1,6 +1,8 @@
 package raphaelbrito.com.alcoolgasolina;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     EditText editAlcool;
     Button btnLimpar;
     Button btncalcular;
+    public static final String PREFS_NAME = "MyPrefsFile";
 
 
     @Override
@@ -28,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
         editAlcool = (EditText)findViewById(R.id.editTextAlcool);
         btncalcular = (Button) findViewById(R.id.buttonCalcular);
         btnLimpar = (Button) findViewById(R.id.buttonLimpar);
+
+        //Pegar valores gravados
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        editAlcool.setText(settings.getString("valorAlcool", "0"));
+        editGasolina.setText(settings.getString("valorGasolina", "0"));
+
 
         btnLimpar.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -52,29 +61,39 @@ public class MainActivity extends AppCompatActivity {
                     double valorAlcool = Float.valueOf(strAlcool);
                     double valorGasolina = Float.valueOf(strGasolina);
 
-                    Log.d("MainActivity - Edit Alcool", String.valueOf(valorAlcool));
-                    Log.d("MainActivity - Edit Gasolina", String.valueOf(valorGasolina));
+                    Log.d("MainActivity-EditAlcool", String.valueOf(valorAlcool));
+                    Log.d("MainActivity-EditGasoli", String.valueOf(valorGasolina));
 
                     //Cria o gerador do AlertDialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                     //define o titulo
                     builder.setTitle(R.string.melhor_usar);
-
+                    //Cálculo Gasolina x Álcool
                     double resultado = (valorGasolina * 0.7);
-                    Log.d("MainActivity - Edit Result", String.valueOf(valorGasolina * 0.7));
+                    Log.d("MainActivity-EditResult", String.valueOf(valorGasolina * 0.7));
+
+                    Intent it = new Intent(MainActivity.this, ListaPreco.class);
                     if (resultado < valorAlcool) {
-                        Log.d("MainActivity - Resultado", "É Melhor usar Gasolina");
+                        Log.d("MainActivity-Resultado", "É Melhor usar Gasolina");
                         //define a mensagem
                         builder.setMessage(R.string.gasolina);
+                        it.putExtra("resultado", "Gasolina" );
                         builder.show();
+                        startActivity(it);
                     } else {
-                        Log.d("MainActivity - Resultado", "É Melhor usar Álcool");
+                        Log.d("MainActivity-Resultado", "É Melhor usar Álcool");
                         //define a mensagem
                         builder.setMessage(R.string.alcool);
+                        it.putExtra("resultado","Álcool" );
                         builder.show();
+                        startActivity(it);
                     }
-
-
+                    // Salvar valores para usar depois
+                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("valorGasolina", String.valueOf(valorGasolina));
+                    editor.putString("valorAlcool", String.valueOf(valorAlcool));
+                    editor.commit();
                 }
 
             }
